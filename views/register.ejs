@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body{
+            text-align: center;
+            background-color: rgb(119, 199, 99);
+        }
+        .box{
+            margin-top: 50px;
+            padding: 50px;
+            background-color: aqua;
+            width: fit-content;
+            height:fit-content;
+            margin-left: 450px;
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
+        .box input{
+            line-height: 31px;
+             height: 30px;
+             border: 0;
+             padding: 10px;
+             width:280px;
+             margin: 10px;
+        }
+        .box select{
+            height: 40px;
+             border: 0;
+             padding: 10px;
+             width:300px;
+             margin: 10px;
+        }
+        .box button{
+            height: 50px;
+             border: 0;
+             padding: 10px;
+             width:300px;
+             margin: 10px;
+             border-radius: 10px;
+             font-family: Arial, Helvetica, sans-serif;
+             font-weight: 300px;
+             font-size: 20px;
+             cursor: pointer;
+        }
+        .box button:hover{
+             background-color: green;
+             color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+    <h1>Registration</h1>
+
+    <input type="text" id="name" placeholder="Enter Name" autocomplete="off" required><br>
+    <input type="email" id="email" placeholder="Email" autocomplete="off" required><br>
+    <select id="subscription"><br>
+        <option disabled>Choose Type</option>
+        <option>Free</option>
+        <option>Paid</option>
+    </select><br>
+    <input type="password" id="password" placeholder="Choose Your Password" required><br>
+    <!-- @TODO: Add confirm password field --> 
+    <button id="btn">Submit</button><br>
+    <button id="log">login</button>
+</div>
+</body>
+<script>
+    const name = document.getElementById("name"),
+          email = document.getElementById("email"),
+          subscription = document.getElementById("subscription"),
+          password = document.getElementById("password"),
+          submitButton = document.getElementById("btn");
+          loginButton = document.getElementById("log")
+
+
+    loginButton.addEventListener("click",()=>{
+        location.href = "http://127.0.0.1:8000/login";
+    })
+
+    submitButton.addEventListener("click", submitDetails);
+
+    function submitDetails(){
+
+        // @TODO: Create a confirm password check.
+
+        const data = {
+            method : 'POST',
+            body : JSON.stringify({
+                name : name.value,
+                email : email.value,
+                subscription : subscription.value,
+                password : password.value
+            }),
+            headers: new Headers({
+                'Content-Type' : 'application/json'
+            })
+        }
+
+        // Send Details to Server.
+        fetch('/register',data)
+            .then(response=>response.json())
+            .then((response)=>{
+                console.log(response); //Collect response from server.
+                
+                if(response.status_code === 200){
+                    location.href = "http://127.0.0.1:8000/urlshorten";
+                }
+            })
+            .catch(handleError);
+
+        function handleError(){
+            console.log("Fetch Error...");
+        }
+
+
+        // Clear all inputs
+        name.value = "";
+        email.value = "";
+        subscription.value = "";
+        password.value = "";
+    }
+
+</script>
+</html>

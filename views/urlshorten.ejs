@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+    body{
+        background-color: rgb(100, 209, 100);
+        text-align: center;
+        margin: 0;
+    }
+    .box{
+        
+        margin: auto;
+        padding: 150px;
+        background-color: aqua;
+        width: fit-content;
+    }
+    .box input{
+        line-height: 31px;
+             height: 30px;
+             border: 0;
+             padding: 10px;
+             width:280px;
+             margin: 10px;
+    }
+    .box button{
+            height: 50px;
+             border: 0;
+             padding: 10px;
+             width:300px;
+             margin: 10px;
+             border-radius: 10px;
+             font-family: Arial, Helvetica, sans-serif;
+             font-weight: 300px;
+             font-size: 20px;
+             cursor: pointer;
+        }
+        .box button:hover{
+             background-color: green;
+             color: white;
+        }
+        header{
+        display: flex;
+        background-color: white;
+        height: 100px;
+        border: 0;
+        justify-content: right;
+        text-decoration: none;
+    }
+    .hdr_cnt ul a{
+        text-decoration: none;
+        font-size: 28px;
+        padding: 20px;
+        margin: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .hdr_cnt ul a:hover{
+        background-color: #3dcf86;
+        color: white;
+    }
+    button{
+        /* height: 40px; */
+        width: 180px;
+        padding: 20px;
+        border: 0;
+        margin: 10px;
+        font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+        background-color: red;
+    }
+  
+    .hdr_cnt{
+        margin: 20px;
+    }
+    .hding{
+        background-color: black;
+        padding: 300px;
+        color: white;
+    }
+    #out:hover{
+         background-color: #3dcf86;
+         cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+     
+    
+
+    <header>
+        <div class="hdr">
+        <div class="hdr_cnt">
+         <ul>
+            <a href="" value="active">Home</a>
+            <a href="">Programming</a>
+            <a href="">Syntax</a>
+            <a href="">Error</a>
+        
+            <button id="out">Logout</button> 
+          <button><%=email%></button>  
+    
+    </ul>
+    </div>
+    </div>
+    
+    </header>
+
+
+
+
+
+
+
+    <div class="box">
+       
+            <h2 style="color: white;">Welcome, <span style="color:red;"> <%=email%></span></h2>
+
+            <input type="url" id="url" placeholder="Enter URL here" required>
+            <input type="text" id="slug" placeholder="Enter Slug" required><br>
+             <button style="width: 140px;" id="btn">URL Shorten</button><br>
+
+          </div>
+</body>
+<script>
+    let url = document.getElementById("url"),
+        slug = document.getElementById("slug"),
+        submitButton = document.getElementById("btn"),
+        logoutButton = document.getElementById("out");
+        
+        logoutButton.addEventListener("click",()=>{
+            location.href = "http://127.0.0.1:8000/logout";
+        })
+
+    submitButton.addEventListener("click",()=>{
+        let data = {
+            method : 'POST',
+            body : JSON.stringify({
+                url : url.value,
+                slug : slug.value
+            }),
+            headers : new Headers({
+                'Content-Type' : 'application/json'
+            })
+        }
+
+
+        fetch('/urlshorten', data)
+            .then(response=>response.json())
+            .then((response)=>{
+                console.log(response);
+
+                if(response.new_url == undefined)
+                    alert(response.message);
+                else
+                    alert(response.new_url);
+            })
+            .catch(err=>console.log("Error"));
+
+
+            // Empty all the inputs
+            url.value = "";
+            slug.value = "";
+
+    })
+    
+
+</script>
+</html>
